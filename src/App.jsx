@@ -1,28 +1,33 @@
-import { useState } from 'react'
+import { useState } from 'react';
+import Hero from './components/Hero';
+import CommissionCalculator from './components/CommissionCalculator';
+import CommissionTable from './components/CommissionTable';
+import Footer from './components/Footer';
 
-function App() {
-  const [count, setCount] = useState(0)
+export default function App() {
+  const [scenarios, setScenarios] = useState([]);
+
+  const handleSaveScenario = (scenario) => {
+    setScenarios((prev) => [
+      { id: crypto.randomUUID(), date: new Date().toISOString(), ...scenario },
+      ...prev,
+    ].slice(0, 6));
+  };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50 flex items-center justify-center">
-      <div className="bg-white p-8 rounded-lg shadow-lg">
-        <h1 className="text-3xl font-bold text-gray-800 mb-4">
-          Vibe Coding Platform
-        </h1>
-        <p className="text-gray-600 mb-6">
-          Your AI-powered development environment
-        </p>
-        <div className="text-center">
-          <button
-            onClick={() => setCount(count + 1)}
-            className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded"
-          >
-            Count is {count}
-          </button>
+    <div className="min-h-screen bg-neutral-950 text-white">
+      <Hero />
+      <main className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 -mt-24 relative z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
+          <div className="lg:col-span-3">
+            <CommissionCalculator onSave={handleSaveScenario} />
+          </div>
+          <div className="lg:col-span-2">
+            <CommissionTable scenarios={scenarios} />
+          </div>
         </div>
-      </div>
+      </main>
+      <Footer />
     </div>
-  )
+  );
 }
-
-export default App
